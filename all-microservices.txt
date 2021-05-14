@@ -1,4 +1,3 @@
-Please use phase1 feature branch to push and pull changes.
 1) Product MS
 
 https://github.com/sumityerawar/product-ms.git
