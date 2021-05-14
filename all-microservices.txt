@@ -1,1 +1,20 @@
+Please use phase1 feature branch to push and pull changes.
+1) Product MS
 
+https://github.com/sumityerawar/product-ms.git
+
+2) Customer MS
+
+https://github.com/sumityerawar/customer-ms.git
+
+3) Order MS
+
+https://github.com/sumityerawar/order-ms.git
+
+4) Cart MS
+
+https://github.com/sumityerawar/cart-ms.git
+
+5) Order Management MS
+
+https://github.com/sumityerawar/order-mgmt-composite-ms.git
