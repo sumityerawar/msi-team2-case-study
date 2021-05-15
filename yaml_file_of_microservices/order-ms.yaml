@@ -1,0 +1,537 @@
+swagger: '2.0'
+
+info:
+
+  description: Product API providing endpoints for Product use cases.
+
+  version: v1.0.0
+
+  title: Product MS
+
+basePath: /product-ms/v1.0
+
+schemes:
+
+  - https
+
+consumes:
+
+  - application/json
+
+produces:
+
+  - application/json
+
+paths:
+
+  /products:
+
+    post:
+
+      summary: To create products
+
+      operationId: createProducts
+
+      tags:
+
+        - Product MS
+
+      parameters:
+
+        - $ref: '#/parameters/userName'
+
+        - $ref: '#/parameters/accountType'
+
+      responses:
+
+        202:
+
+          $ref: '#/responses/Standard202SuccessResponse'
+
+        405:
+
+          $ref: '#/responses/Standard405ErrorResponse'
+
+        406:
+
+          $ref: '#/responses/Standard406ErrorResponse'
+
+        415:
+
+          $ref: '#/responses/Standard415ErrorResponse'
+		  
+  /product:
+
+    post:
+
+      summary: To create product.
+
+      operationId: createProduct.
+
+      tags:
+
+        - Product MS
+
+      parameters:
+
+      responses:
+
+        202:
+
+          $ref: '#/responses/Standard202SuccessResponse'
+
+        405:
+
+          $ref: '#/responses/Standard405ErrorResponse'
+
+        406:
+
+          $ref: '#/responses/Standard406ErrorResponse'
+
+        415:
+
+          $ref: '#/responses/Standard415ErrorResponse'		  
+
+  /products/{productId}:
+
+    get:
+
+      summary: fetch product info based on product id.
+
+      operationId: getAccountDetails
+
+      tags:
+
+        - Product MS
+
+      parameters:
+
+        - name: productId
+
+          in: path
+
+          description: Product Id
+
+          type: string
+
+          required: true
+
+      responses:
+
+        200:
+
+          $ref: '#/responses/Standard200SuccessResponse'
+
+        405:
+
+          $ref: '#/responses/Standard405ErrorResponse'
+
+    delete:
+
+      summary: Delete product using productId
+
+      operationId: deleteProduct
+
+      tags:
+
+        - Product MS
+
+      parameters:
+
+        - name: productId
+
+          in: path
+
+          description: Product Id
+
+          type: string
+
+          required: true
+
+      responses:
+
+        200:
+
+          $ref: '#/responses/Standard200SuccessResponse'
+
+        405:
+
+          $ref: '#/responses/Standard405ErrorResponse'
+
+  /info:
+
+    get:
+
+      summary: Service Health Check
+
+      operationId: info
+
+      tags:
+
+        - Operational Status
+
+      responses:
+
+        200:
+
+          description: Information about the service
+
+          schema:
+
+            $ref: '#/definitions/infoResponse'
+
+          headers:
+
+            Strict-Transport-Security:
+
+              description: 'HTTPS strict transport security header'
+
+              type: string
+
+              default: max-age=0
+
+            Cache-Control:
+
+              description: 'Describes how long this response can be cached'
+
+              type: string
+
+              default: 'max-age=0,no-cache,no-store'
+
+            X-Frame-Options:
+
+              description: 'Prevent this request from being loaded in any iframes'
+
+              type: string
+
+              default: DENY
+
+            X-Content-Type-Options:
+
+              description: >-
+
+                Ensures each page has a content type and prevents browsers from
+
+                doing MIME type sniffing
+
+              type: string
+
+              default: nosniff
+
+        400:
+
+          $ref: '#/responses/Standard400ErrorResponse'
+
+        404:
+
+          $ref: '#/responses/Standard404ErrorResponse'
+
+        405:
+
+          $ref: '#/responses/Standard405ErrorResponse'
+
+        406:
+
+          $ref: '#/responses/Standard406ErrorResponse'
+
+        415:
+
+          $ref: '#/responses/Standard415ErrorResponse'
+
+responses:
+
+  Standard200SuccessResponse:
+
+    description: 'Success Response'
+
+    schema:
+
+      $ref: '#/definitions/ProductMSResponse'
+
+  Standard202SuccessResponse:
+
+    description: 'Batch Job Triggered'
+
+    schema:
+
+      $ref: '#/definitions/ProductMSResponse'
+
+  Standard400ErrorResponse:
+
+    description: 'Bad Request Response'
+
+    schema:
+
+      $ref: '#/definitions/Errors'
+
+  Standard404ErrorResponse:
+
+    description: 'Not Found Response'
+
+    schema:
+
+      $ref: '#/definitions/Errors'
+
+  Standard405ErrorResponse:
+
+    description: 'Method not allowed Response'
+
+    schema:
+
+      $ref: '#/definitions/Errors'
+
+  Standard406ErrorResponse:
+
+    description: 'Not Acceptable Response'
+
+    schema:
+
+      $ref: '#/definitions/Errors'
+
+  Standard415ErrorResponse:
+
+    description: 'Unsupported media type error Response'
+
+    schema:
+
+      $ref: '#/definitions/Errors'
+
+parameters:
+
+  userName:
+
+    description: User Name
+
+    name: user-name
+
+    in: header
+
+    type: string
+
+    maxLength: 36
+
+    required: true
+
+  accountType:
+
+    description: Account Type
+
+    name: account-type
+
+    in: header
+
+    type: string
+
+    enum:
+
+      - 'SAVINGS'
+
+      - 'CURRENT'
+
+    required: false
+
+definitions:
+
+  ProductMSResponse:
+
+    type: object
+
+    properties:
+
+      batch:
+
+        $ref: '#/definitions/Batch'
+
+    additionalProperties: false
+
+    required:
+
+      - batch
+
+  Batch:
+
+    type: object
+
+    properties:
+
+      accountId:
+
+        type: integer
+
+        maxLength: 20
+
+        example: '111'
+
+      status:
+
+        type: string
+
+        enum:
+
+          - 'STARTING'
+
+          - 'STARTED'
+
+          - 'COMPLETED'
+
+          - 'STOPPING'
+
+          - 'STOPPED'
+
+          - 'ABANDONED'
+
+          - 'UNKNOWN'
+
+        example: 'COMPLETED'
+
+      startTime:
+
+        type: string
+
+        format: date-time
+
+        pattern: 'YYYY-MM-DDT14:00:00Z'
+
+        example: '01/01/2020 14:00'
+
+      endTime:
+
+        type: string
+
+        format: date-time
+
+        pattern: 'YYYY-MM-DDT14:00:00Z'
+
+        example: '01/01/2020 14:00'
+
+    additionalProperties: false
+
+    required:
+
+      - accountId
+
+      - status
+
+  infoResponse:
+
+    properties:
+
+      version:
+
+        type: string
+
+        maximum: 10
+
+        example: 1.0.0
+
+      contextRoot:
+
+        type: string
+
+        maximum: 36
+
+        example: /product-ms/v1.0
+
+      artifactVersion:
+
+        type: string
+
+        maximum: 36
+
+        example: 1.99.xxx
+
+    additionalProperties: false
+
+    required:
+
+      - version
+
+      - contextRoot
+
+      - artifactVersion
+
+  Errors:
+
+    type: array
+
+    items:
+
+      $ref: '#/definitions/Error'
+
+    additionalProperties: false
+
+  Error:
+
+    type: object
+
+    properties:
+
+      code:
+
+        type: string
+
+        maxLength: 50
+
+      message:
+
+        type: string
+
+        maxLength: 100
+
+      reasonCode:
+
+        type: string
+
+        maxLength: 50
+
+      authStatus:
+
+        example: 'TECHNICAL_ERROR'
+
+        type: string
+
+        enum:
+
+          - 'TECHNICAL_ERROR'
+
+          - 'FRAUD_INDICATED'
+
+          - 'AUTHENTICATION_CANCELLED'
+
+          - 'SESSION_EXPIRED'
+
+      authMethod:
+
+        example: 'ACCOUNT/CUSTOMER'
+
+        type: string
+
+        enum:
+
+          - 'ACCOUNT/CUSTOMER'
+
+    required:
+
+      - code
+
+      - message
+
+      - reasonCode
+
+      - authStatus
+
+      - authMethod
+
+    additionalProperties: false
+
+    example:
+
+      code: '1345'
+
+      reasonCode: 'invalidParameter'
+
+      message: 'Invalid string value: ''asdf''. Allowed values: [mostpopular]'
+
+      authStatus: 'TECHNICAL_ERROR'
+
+      authMethod: 'ACCOUNT/CUSTOMER'
